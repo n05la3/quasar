@@ -4,7 +4,9 @@ import { h, ref } from 'vue'
 import QSelect from '../QSelect.js'
 
 function getHostElement (extendedSelector = '') {
-  return cy.get(`.q-select ${ extendedSelector }`)
+  // A majority of tests click on the select, so we ensure the select is visible before the click happens.
+  // See https://github.com/cypress-io/cypress/discussions/14889
+  return extendedSelector ? cy.get(`.q-select ${ extendedSelector }`) : cy.get('.q-select').should('be.visible')
 }
 
 function mountQSelect (options = {}) {
@@ -222,6 +224,7 @@ describe('QSelect API', () => {
             .click()
           cy.get('.q-menu')
             .contains('Option 1')
+            .should('be.visible')
             .click()
           cy.get('.q-menu')
             .then(() => {
@@ -242,6 +245,7 @@ describe('QSelect API', () => {
             .click()
           cy.get('.q-menu')
             .contains('Option 1')
+            .should('be.visible')
             .click()
           cy.get('.q-menu')
             .then(() => {
@@ -266,6 +270,7 @@ describe('QSelect API', () => {
           getHostElement().click()
           cy.withinSelectMenu(() => {
             cy.contains('Option 1')
+              .should('be.visible')
               .click()
             cy.contains('Option 1')
               .then(() => {
@@ -276,6 +281,7 @@ describe('QSelect API', () => {
           getHostElement().click()
           cy.withinSelectMenu(() => {
             cy.contains('Option 2')
+              .should('be.visible')
               .click()
             cy.contains('Option 2')
               .then(() => {
@@ -300,6 +306,7 @@ describe('QSelect API', () => {
             persistent: true,
             fn: () => {
               cy.contains('Option 1')
+                .should('be.visible')
                 .click()
               cy.contains('Option 1')
                 .then(() => {
@@ -307,6 +314,7 @@ describe('QSelect API', () => {
                 })
 
               cy.contains('Option 2')
+                .should('be.visible')
                 .click()
               cy.contains('Option 2')
                 .then(() => {
@@ -353,6 +361,7 @@ describe('QSelect API', () => {
             .click()
           cy.get('.q-menu')
             .contains(options[ 0 ].label)
+            .should('be.visible')
             .click()
           cy.get('.q-menu')
             .then(() => {
@@ -375,6 +384,7 @@ describe('QSelect API', () => {
             .click()
           cy.get('.q-menu')
             .contains(options[ 0 ].label)
+            .should('be.visible')
             .click()
           cy.get('.q-menu')
             .then(() => {
@@ -397,6 +407,7 @@ describe('QSelect API', () => {
             .click()
           cy.get('.q-menu')
             .contains(options[ 0 ].label)
+            .should('be.visible')
             .click()
           cy.get('.q-menu')
             .then(() => {
@@ -636,6 +647,8 @@ describe('QSelect API', () => {
           })
           getHostElement()
             .click()
+          cy.get('.q-menu').should('be.visible')
+          getHostElement()
             .isNotActionable(done)
         })
 
@@ -868,6 +881,7 @@ describe('QSelect API', () => {
             .click()
           cy.get('.q-menu')
             .get('[role="option"]')
+            .should('be.visible')
             .as('clicked')
             .click({ multiple: true })
           cy.get('@clicked')
@@ -1242,6 +1256,7 @@ describe('QSelect API', () => {
         cy.get('.q-menu')
           .get('[role="option"]')
           .first()
+          .should('be.visible')
           .as('clicked')
           .click()
         cy.get('@clicked')
@@ -1292,6 +1307,7 @@ describe('QSelect API', () => {
         cy.get('.q-menu')
           .get('[role="option"]')
           .first()
+          .should('be.visible')
           .as('clicked')
           .click()
         cy.get('@clicked')
@@ -1301,6 +1317,7 @@ describe('QSelect API', () => {
         cy.get('.q-menu')
           .get('[role="option"]')
           .first()
+          .should('be.visible')
           .as('clicked')
           .click()
         cy.get('@clicked')
@@ -1330,6 +1347,7 @@ describe('QSelect API', () => {
         cy.get('.q-menu')
           .get('[role="option"]')
           .first()
+          .should('be.visible')
           .as('clicked')
           .click()
         cy.get('@clicked')
@@ -1544,6 +1562,7 @@ describe('QSelect API', () => {
           }
         })
 
+        getHostElement()
         cy.get('.q-menu')
           .should('not.exist')
           .then(() => {
@@ -1665,6 +1684,7 @@ describe('QSelect API', () => {
         })
 
         getHostElement()
+          .should('be.visible')
           .click()
           .get('input')
           .type('h')
@@ -1690,6 +1710,7 @@ describe('QSelect API', () => {
         })
 
         getHostElement()
+          .should('be.visible')
           .click()
           .get('input')
           .type('h')
